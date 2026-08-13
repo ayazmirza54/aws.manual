@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-theme="phosphor" data-crt="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aws.manual — offline terminal reference for AWS</title>
+<meta name="description" content="The Open Guide to Amazon Web Services as an offline, terminal-styled reference: 65 sections, full-text search, no network required.">
+<meta name="color-scheme" content="dark light">
+<link rel="stylesheet" href="assets/css/terminal.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+
+<div id="boot" class="boot" role="status" aria-live="polite">
+  <pre id="boot-log" class="boot-log"></pre>
+  <p class="boot-skip">press any key to skip</p>
+</div>
+
+<div class="crt" id="crt">
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <button class="topbar-btn menu-btn" id="menu-btn" aria-label="Toggle section list" aria-expanded="false">☰</button>
+    <a class="brand" href="#/" data-nav="1">
+      <span class="brand-mark">▚</span><span class="brand-name">aws.manual</span>
+    </a>
+    <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+    <div class="topbar-right">
+      <button class="topbar-btn" id="search-btn" title="Search (Ctrl+K)">⌕ search</button>
+      <button class="topbar-btn" id="theme-btn" title="Cycle theme (T)">▮ <span id="theme-name">phosphor</span></button>
+      <span class="clock" id="clock" aria-hidden="true">--:--:--</span>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar" id="sidebar" aria-label="Sections">
+      <div class="filter-row">
+        <span class="filter-prompt">/</span>
+        <input id="filter" type="text" placeholder="filter sections" autocomplete="off" spellcheck="false" aria-label="Filter sections">
+      </div>
+      <nav class="tree" id="tree"></nav>
+      <div class="sidebar-foot">
+        <span id="corpus-stats"></span>
+      </div>
+    </aside>
+
+    <main class="viewport" id="viewport" tabindex="-1">
+      <article class="doc" id="doc"></article>
+      <footer class="doc-foot" id="doc-foot"></footer>
+    </main>
+  </div>
+
+  <section class="console" id="console" hidden aria-label="Command output">
+    <div class="console-bar">
+      <span class="console-title">stdout</span>
+      <button class="topbar-btn" id="console-close" aria-label="Close output">esc ✕</button>
+    </div>
+    <div class="console-log" id="console-log" tabindex="0"></div>
+  </section>
+
+  <footer class="promptbar">
+    <label class="ps1" for="cmd" id="ps1">aws@og:~$</label>
+    <input id="cmd" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+           aria-label="Command line" placeholder="type help — or / to filter, ctrl+k to search">
+    <span class="hint" id="hint">help</span>
+  </footer>
+</div>
+
+<div class="overlay" id="palette" hidden>
+  <div class="palette-box" role="dialog" aria-modal="true" aria-label="Search the guide">
+    <div class="palette-input-row">
+      <span class="palette-prompt">grep&nbsp;-r</span>
+      <input id="palette-input" type="text" autocomplete="off" spellcheck="false" placeholder="search 46,000 words…" aria-label="Search query">
+    </div>
+    <div class="palette-results" id="palette-results"></div>
+    <div class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+      <span><kbd>enter</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="help" hidden>
+  <div class="help-box" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+    <h2>keyboard</h2>
+    <div class="help-grid" id="help-grid"></div>
+    <p class="help-foot">type <code>help</code> at the prompt for the command list · <kbd>esc</kbd> closes</p>
+  </div>
+</div>
+
+<script src="data/content.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/shell.js"></script>
+<script src="assets/js/boot.js"></script>
+</body>
+</html>
