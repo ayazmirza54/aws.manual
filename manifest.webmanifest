@@ -1,12 +1,12 @@
 {
-  "name": "aws.manual — offline terminal reference for AWS",
+  "name": "aws.manual — offline reference for AWS",
   "short_name": "aws.manual",
   "description": "The Open Guide to Amazon Web Services, rebuilt as an offline terminal-styled reference.",
-  "start_url": "./index.html",
+  "start_url": "./manual.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#05090a",
-  "theme_color": "#05090a",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "assets/favicon.svg",

@@ -5,10 +5,10 @@ An offline, terminal-styled reference site built from
 (`open-guides/og-aws`).
 
 The whole guide — 65 sections, ~46,500 words, 50 AWS services — is compiled into a
-single static page with a working command line, full-text search, and a CRT
-aesthetic. Once the files are on disk it never touches the network: no CDN, no web
-fonts, no analytics, no `fetch()`. Open `index.html` from a USB stick on a plane and
-everything still works.
+single static page with a working command line and full-text search, fronted by a
+landing page. Once the files are on disk it never touches the network: no CDN, no
+analytics, no `fetch()`, and the fonts are vendored. Open `manual.html` from a USB
+stick on a plane and everything still works.
 
 ```
 ╔═╗╦ ╦╔═╗ ╔╦╗╔═╗╔╗╔╦ ╦╔═╗╦
@@ -20,7 +20,7 @@ everything still works.
 
 ```sh
 # straight off the filesystem — no server needed
-xdg-open index.html      # or: open index.html
+xdg-open manual.html     # or: open manual.html (index.html is the landing page)
 ```
 
 Serving it over HTTP also works and additionally registers a service worker, so the
@@ -44,7 +44,7 @@ frequently used ones:
 | `tags gotcha` | every section carrying a legend mark, by count |
 | `cat lambda` / `head lambda` | dump a section as text / just the summary |
 | `star`, `stars`, `recent` | bookmarks and history |
-| `theme amber`, `crt off`, `font +` | phosphor · amber · ice · synth · paper |
+| `theme lime`, `font +`, `crt on` | orange · lime · ice · synth · paper |
 | `stats`, `neofetch`, `source` | corpus and provenance |
 
 Keyboard: <kbd>ctrl+k</kbd> search · <kbd>/</kbd> filter the section list ·
@@ -52,8 +52,18 @@ Keyboard: <kbd>ctrl+k</kbd> search · <kbd>/</kbd> filter the section list ·
 <kbd>tab</kbd> completion · <kbd>↑</kbd><kbd>↓</kbd> command history ·
 <kbd>esc</kbd> closes things. Typing any other key jumps straight to the prompt.
 
-Routes are hash-based (`#/s3`, `#/ec2#ec2-tips`), so every section and subsection is
-linkable and the back button behaves.
+Routes are hash-based (`manual.html#/s3`, `manual.html#/ec2#ec2-tips`), so every
+section and subsection is linkable and the back button behaves. Older
+`index.html#/…` links redirect to the manual.
+
+## Design
+
+The look is ported from [devvm.dev](https://devvm.dev/) and recoloured for AWS:
+black background, AWS orange accent, squid-ink borders, pixel headings and
+diagrams in Departure Mono, body text in Instrument Sans, code in Martian Mono.
+The tokens, fonts and shared pieces (logo, buttons, tags) live in
+`assets/css/theme.css`, and both pages follow the theme chosen in the manual. The
+fonts are open source (SIL OFL) and vendored in `assets/fonts/`.
 
 ## How it is built
 
@@ -84,8 +94,12 @@ plain text once, in the background, on first load (~640 KB payload instead of ~9
 ### Layout
 
 ```
-index.html              app shell
-assets/css/terminal.css themes, CRT overlay, print styles
+index.html              landing page
+manual.html             app shell
+assets/css/theme.css    design tokens, themes, fonts, shared primitives
+assets/css/landing.css  landing page
+assets/css/terminal.css manual layout, print styles
+assets/fonts/           vendored fonts (SIL OFL), see its README
 assets/js/app.js        router, renderer, search, palette
 assets/js/shell.js      command interpreter, completion, history
 assets/js/boot.js       boot sequence, service-worker registration
@@ -118,6 +132,7 @@ The guide's text is © the og-aws contributors, licensed
 and the in-app `credits` and `license` pages. This repository reproduces it under
 that license; the content is unmodified apart from formatting for the web.
 
-The site code (build script, CSS, JS) is MIT licensed — see `LICENSE`.
+The site code (build script, CSS, JS) is MIT licensed — see `LICENSE`. The fonts
+in `assets/fonts/` are under the SIL Open Font License 1.1.
 
 Not affiliated with, endorsed by, or sponsored by Amazon Web Services.

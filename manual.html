@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" data-theme="orange" data-crt="off">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aws.manual — offline reference for AWS</title>
+<meta name="description" content="The Open Guide to Amazon Web Services as an offline, terminal-styled reference: 65 sections, full-text search, no network required.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#000000">
+<script>
+/* Apply the saved theme before first paint. */
+(function () {
+  try {
+    var t = JSON.parse(localStorage.getItem("aws.manual:theme.v2"));
+    if (/^(orange|lime|ice|synth|paper)$/.test(t)) document.documentElement.setAttribute("data-theme", t);
+  } catch (e) { /* default theme */ }
+})();
+</script>
+<link rel="preload" href="assets/fonts/DepartureMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/terminal.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-term" viewBox="0 0 12 12"><path d="M1 1h10v1H1zM0 2h1v8H0zM11 2h1v8h-1zM1 10h10v1H1zM3 4h1v1H3zM4 5h1v1H4zM3 6h1v1H3zM6 7h3v1H6z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 12 12"><path d="M1 2h4v1H1zM7 2h4v1H7zM0 3h1v7H0zM11 3h1v7h-1zM5 3h2v1H5zM1 9h4v1H1zM7 9h4v1H7zM5 10h2v1H5zM2 5h2v1H2zM8 5h2v1H8zM2 7h2v1H2zM8 7h2v1H8z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 12 12"><path d="M3 1h4v1H3zM2 2h1v1H2zM7 2h1v1H7zM1 3h1v4H1zM8 3h1v4H8zM2 7h1v1H2zM7 7h1v1H7zM3 8h4v1H3zM8 8h1v1H8zM9 9h1v1H9zM10 10h1v1h-1z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 12 12"><path d="M1 5h7v2H1zM6 2h1v1H6zM7 3h1v1H7zM8 4h1v1H8zM8 5h2v2H8zM8 7h1v1H8zM7 8h1v1H7zM6 9h1v1H6z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 12 12"><path d="M2 1h8v1H2zM1 2h1v5H1zM10 2h1v5h-1zM2 7h1v2H2zM9 7h1v2H9zM3 9h1v1H3zM8 9h1v1H8zM4 10h1v1H4zM7 10h1v1H7zM5 11h2v1H5zM5 3h2v4H5zM5 8h2v1H5z"/></symbol>
+  <symbol id="i-stack" viewBox="0 0 12 12"><path d="M1 1h10v1H1zM1 3h10v1H1zM0 2h1v1H0zM11 2h1v1h-1zM1 5h10v1H1zM1 7h10v1H1zM0 6h1v1H0zM11 6h1v1h-1zM1 9h10v2H1z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 12 12"><path d="M7 0h2v1H7zM6 1h2v1H6zM5 2h2v1H5zM4 3h2v1H4zM3 4h7v2H3zM7 6h2v1H7zM6 7h2v1H6zM5 8h2v1H5zM4 9h2v1H4zM3 10h2v1H3z"/></symbol>
+  <symbol id="i-faq" viewBox="0 0 12 12"><path d="M1 0h10v1H1zM0 1h1v7H0zM11 1h1v7h-1zM1 8h1v1H1zM5 8h6v1H5zM2 9h1v2H2zM3 9h2v1H3zM3 10h1v1H3zM5 2h2v1H5zM4 3h1v1H4zM7 3h1v1H7zM6 4h1v1H6zM5 5h1v1H5zM5 7h1v0zM5 6h1v1H5z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 12 12"><path fill-rule="evenodd" d="M1 1h4v4H1zM2 2v2h2V2zM7 1h4v4H7zM8 2v2h2V2zM1 7h4v4H1zM2 8v2h2V8zM7 7h4v4H7zM8 8v2h2V8z"/></symbol>
+  <symbol id="i-disk" viewBox="0 0 12 12"><path d="M1 1h8v1H1zM0 2h1v8H0zM9 2h1v1H9zM10 3h1v7h-1zM1 10h9v1H1zM3 2h4v2H3zM3 7h5v3H3z"/></symbol>
+  <symbol id="i-keys" viewBox="0 0 12 12"><path d="M1 2h10v1H1zM0 3h1v6H0zM11 3h1v6h-1zM1 9h10v1H1zM2 4h1v1H2zM4 4h1v1H4zM6 4h1v1H6zM8 4h2v1H8zM2 7h1v1H2zM4 7h4v1H4zM9 7h1v1H9z"/></symbol>
+  <symbol id="i-git" viewBox="0 0 12 12"><path d="M2 1h3v3H2zM2 8h3v3H2zM7 3h3v3H7zM3 4h1v4H3zM4 6h4v1H4z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 12 12"><path d="M5 1h6v1H5zM10 2h1v5h-1zM8 3h1v1H8zM7 4h1v1H7zM6 5h1v1H6zM5 6h1v1H5zM1 3h3v1H1zM1 4h1v6H1zM1 10h8v1H1zM8 8h1v2H8z"/></symbol>
+</svg>
+
+<div id="boot" class="boot" role="status" aria-live="polite">
+  <pre id="boot-log" class="boot-log"></pre>
+  <p class="boot-skip">press any key to skip</p>
+</div>
+
+<div class="crt" id="crt">
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <button class="topbar-btn menu-btn" id="menu-btn" aria-label="Toggle section list" aria-expanded="false">☰</button>
+    <a class="logo brand" href="#/" data-nav="1" aria-label="aws.manual index"><b>❯</b>aws.manual</a>
+    <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+    <div class="topbar-right">
+      <span class="clock" id="clock" aria-hidden="true">--:--:--</span>
+      <button class="search-btn" id="search-btn" title="Search (Ctrl+K)" aria-label="Search the guide">
+        <svg class="px sm" aria-hidden="true"><use href="#i-search"/></svg><span>Search…</span><kbd>CTRL K</kbd>
+      </button>
+      <button class="topbar-btn" id="theme-btn" title="Cycle theme (T)" aria-label="Cycle theme"><i class="swatch" aria-hidden="true"></i><span id="theme-name">orange</span></button>
+      <a class="topbar-btn about-link" href="index.html" title="About aws.manual">about</a>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar" id="sidebar" aria-label="Sections">
+      <div class="filter-row">
+        <span class="filter-prompt">/</span>
+        <input id="filter" type="text" placeholder="filter sections" autocomplete="off" spellcheck="false" aria-label="Filter sections">
+      </div>
+      <nav class="tree" id="tree"></nav>
+      <div class="sidebar-foot">
+        <span id="corpus-stats"></span>
+      </div>
+    </aside>
+
+    <main class="viewport" id="viewport" tabindex="-1">
+      <article class="doc" id="doc"></article>
+      <footer class="doc-foot" id="doc-foot"></footer>
+    </main>
+  </div>
+
+  <section class="console" id="console" hidden aria-label="Command output">
+    <div class="console-bar">
+      <span class="console-title">stdout</span>
+      <button class="topbar-btn" id="console-close" aria-label="Close output">esc ✕</button>
+    </div>
+    <div class="console-log" id="console-log" tabindex="0"></div>
+  </section>
+
+  <footer class="promptbar">
+    <label class="ps1" for="cmd" id="ps1">aws@og:~$</label>
+    <input id="cmd" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+           aria-label="Command line" placeholder="type help — or / to filter, ctrl+k to search">
+    <span class="hint" id="hint">help</span>
+  </footer>
+</div>
+
+<div class="overlay" id="palette" hidden>
+  <div class="palette-box" role="dialog" aria-modal="true" aria-label="Search the guide">
+    <div class="palette-input-row">
+      <span class="palette-prompt">grep -r</span>
+      <input id="palette-input" type="text" autocomplete="off" spellcheck="false" placeholder="search 46,000 words…" aria-label="Search query">
+    </div>
+    <div class="palette-results" id="palette-results"></div>
+    <div class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+      <span><kbd>enter</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="help" hidden>
+  <div class="help-box" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+    <h2>keyboard</h2>
+    <div class="help-grid" id="help-grid"></div>
+    <p class="help-foot">type <code>help</code> at the prompt for the command list · <kbd>esc</kbd> closes</p>
+  </div>
+</div>
+
+<script src="data/content.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/shell.js"></script>
+<script src="assets/js/boot.js"></script>
+</body>
+</html>
