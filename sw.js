@@ -1,12 +1,19 @@
 /* aws.manual — cache-first service worker, so an http-served copy also works
    with the network unplugged. Bump CACHE when the payload changes. */
 
-var CACHE = "aws-manual-v1";
+var CACHE = "aws-manual-v2";
 var ASSETS = [
   "./",
   "index.html",
+  "manual.html",
   "manifest.webmanifest",
+  "assets/css/theme.css",
+  "assets/css/landing.css",
   "assets/css/terminal.css",
+  "assets/fonts/DepartureMono-Regular.woff2",
+  "assets/fonts/InstrumentSans-Variable.woff2",
+  "assets/fonts/InstrumentSans-Italic-Variable.woff2",
+  "assets/fonts/MartianMono-Variable.woff2",
   "assets/js/app.js",
   "assets/js/shell.js",
   "assets/js/boot.js",
@@ -37,7 +44,7 @@ self.addEventListener("activate", function (event) {
 self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then(function (hit) {
+    caches.match(event.request, { ignoreSearch: true }).then(function (hit) {
       return hit || fetch(event.request).then(function (response) {
         var copy = response.clone();
         caches.open(CACHE).then(function (cache) { cache.put(event.request, copy); });

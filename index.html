@@ -1,98 +1,407 @@
 <!doctype html>
-<html lang="en" data-theme="phosphor" data-crt="on">
+<html lang="en" data-theme="orange">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>aws.manual — offline terminal reference for AWS</title>
-<meta name="description" content="The Open Guide to Amazon Web Services as an offline, terminal-styled reference: 65 sections, full-text search, no network required.">
+<title>aws.manual — one manual for all of AWS</title>
+<meta name="description" content="The Open Guide to Amazon Web Services as an offline terminal: 65 sections, 50 services, full-text search and a working command line. No network required.">
 <meta name="color-scheme" content="dark light">
-<link rel="stylesheet" href="assets/css/terminal.css">
+<meta name="theme-color" content="#000000">
+<script>
+/* Old deep links pointed at index.html#/s3 — the manual now lives in manual.html.
+   Also pick up the theme chosen inside the manual. */
+(function () {
+  if (/^#\/.+/.test(location.hash)) { location.replace("manual.html" + location.hash); return; }
+  try {
+    var t = JSON.parse(localStorage.getItem("aws.manual:theme.v2"));
+    if (/^(orange|lime|ice|synth|paper)$/.test(t)) document.documentElement.setAttribute("data-theme", t);
+  } catch (e) { /* default theme */ }
+})();
+</script>
+<link rel="preload" href="assets/fonts/DepartureMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/landing.css">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-term" viewBox="0 0 12 12"><path d="M1 1h10v1H1zM0 2h1v8H0zM11 2h1v8h-1zM1 10h10v1H1zM3 4h1v1H3zM4 5h1v1H4zM3 6h1v1H3zM6 7h3v1H6z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 12 12"><path d="M1 2h4v1H1zM7 2h4v1H7zM0 3h1v7H0zM11 3h1v7h-1zM5 3h2v1H5zM1 9h4v1H1zM7 9h4v1H7zM5 10h2v1H5zM2 5h2v1H2zM8 5h2v1H8zM2 7h2v1H2zM8 7h2v1H8z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 12 12"><path d="M3 1h4v1H3zM2 2h1v1H2zM7 2h1v1H7zM1 3h1v4H1zM8 3h1v4H8zM2 7h1v1H2zM7 7h1v1H7zM3 8h4v1H3zM8 8h1v1H8zM9 9h1v1H9zM10 10h1v1h-1z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 12 12"><path d="M1 5h7v2H1zM6 2h1v1H6zM7 3h1v1H7zM8 4h1v1H8zM8 5h2v2H8zM8 7h1v1H8zM7 8h1v1H7zM6 9h1v1H6z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 12 12"><path d="M2 1h8v1H2zM1 2h1v5H1zM10 2h1v5h-1zM2 7h1v2H2zM9 7h1v2H9zM3 9h1v1H3zM8 9h1v1H8zM4 10h1v1H4zM7 10h1v1H7zM5 11h2v1H5zM5 3h2v4H5zM5 8h2v1H5z"/></symbol>
+  <symbol id="i-stack" viewBox="0 0 12 12"><path d="M1 1h10v1H1zM1 3h10v1H1zM0 2h1v1H0zM11 2h1v1h-1zM1 5h10v1H1zM1 7h10v1H1zM0 6h1v1H0zM11 6h1v1h-1zM1 9h10v2H1z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 12 12"><path d="M7 0h2v1H7zM6 1h2v1H6zM5 2h2v1H5zM4 3h2v1H4zM3 4h7v2H3zM7 6h2v1H7zM6 7h2v1H6zM5 8h2v1H5zM4 9h2v1H4zM3 10h2v1H3z"/></symbol>
+  <symbol id="i-faq" viewBox="0 0 12 12"><path d="M1 0h10v1H1zM0 1h1v7H0zM11 1h1v7h-1zM1 8h1v1H1zM5 8h6v1H5zM2 9h1v2H2zM3 9h2v1H3zM3 10h1v1H3zM5 2h2v1H5zM4 3h1v1H4zM7 3h1v1H7zM6 4h1v1H6zM5 5h1v1H5zM5 7h1v0zM5 6h1v1H5z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 12 12"><path fill-rule="evenodd" d="M1 1h4v4H1zM2 2v2h2V2zM7 1h4v4H7zM8 2v2h2V2zM1 7h4v4H1zM2 8v2h2V8zM7 7h4v4H7zM8 8v2h2V8z"/></symbol>
+  <symbol id="i-disk" viewBox="0 0 12 12"><path d="M1 1h8v1H1zM0 2h1v8H0zM9 2h1v1H9zM10 3h1v7h-1zM1 10h9v1H1zM3 2h4v2H3zM3 7h5v3H3z"/></symbol>
+  <symbol id="i-keys" viewBox="0 0 12 12"><path d="M1 2h10v1H1zM0 3h1v6H0zM11 3h1v6h-1zM1 9h10v1H1zM2 4h1v1H2zM4 4h1v1H4zM6 4h1v1H6zM8 4h2v1H8zM2 7h1v1H2zM4 7h4v1H4zM9 7h1v1H9z"/></symbol>
+  <symbol id="i-git" viewBox="0 0 12 12"><path d="M2 1h3v3H2zM2 8h3v3H2zM7 3h3v3H7zM3 4h1v4H3zM4 6h4v1H4z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 12 12"><path d="M5 1h6v1H5zM10 2h1v5h-1zM8 3h1v1H8zM7 4h1v1H7zM6 5h1v1H6zM5 6h1v1H5zM1 3h3v1H1zM1 4h1v6H1zM1 10h8v1H1zM8 8h1v2H8z"/></symbol>
+</svg>
 
-<div id="boot" class="boot" role="status" aria-live="polite">
-  <pre id="boot-log" class="boot-log"></pre>
-  <p class="boot-skip">press any key to skip</p>
-</div>
-
-<div class="crt" id="crt">
-  <div class="crt-overlay" aria-hidden="true"></div>
-
-  <header class="topbar">
-    <button class="topbar-btn menu-btn" id="menu-btn" aria-label="Toggle section list" aria-expanded="false">☰</button>
-    <a class="brand" href="#/" data-nav="1">
-      <span class="brand-mark">▚</span><span class="brand-name">aws.manual</span>
-    </a>
-    <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
-    <div class="topbar-right">
-      <button class="topbar-btn" id="search-btn" title="Search (Ctrl+K)">⌕ search</button>
-      <button class="topbar-btn" id="theme-btn" title="Cycle theme (T)">▮ <span id="theme-name">phosphor</span></button>
-      <span class="clock" id="clock" aria-hidden="true">--:--:--</span>
-    </div>
-  </header>
-
-  <div class="workspace">
-    <aside class="sidebar" id="sidebar" aria-label="Sections">
-      <div class="filter-row">
-        <span class="filter-prompt">/</span>
-        <input id="filter" type="text" placeholder="filter sections" autocomplete="off" spellcheck="false" aria-label="Filter sections">
-      </div>
-      <nav class="tree" id="tree"></nav>
-      <div class="sidebar-foot">
-        <span id="corpus-stats"></span>
-      </div>
-    </aside>
-
-    <main class="viewport" id="viewport" tabindex="-1">
-      <article class="doc" id="doc"></article>
-      <footer class="doc-foot" id="doc-foot"></footer>
-    </main>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html" aria-label="aws.manual home"><b>❯</b>aws.manual</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="manual.html">Manual</a>
+      <a class="nav-search" href="manual.html?search" id="nav-search">
+        <svg class="px sm"><use href="#i-search"/></svg><span>Search…</span><kbd>CTRL K</kbd>
+      </a>
+      <a class="nav-icon" href="https://github.com/ayazmirza54/aws.manual" aria-label="Source on GitHub" title="Source on GitHub">
+        <svg class="px"><use href="#i-git"/></svg>
+      </a>
+    </nav>
   </div>
+</header>
 
-  <section class="console" id="console" hidden aria-label="Command output">
-    <div class="console-bar">
-      <span class="console-title">stdout</span>
-      <button class="topbar-btn" id="console-close" aria-label="Close output">esc ✕</button>
+<main>
+
+  <!-- ============ hero ============ -->
+  <section class="hero wrap">
+    <span class="pill">Free, open source and offline</span>
+    <h1>One manual for all of AWS</h1>
+    <p class="lede">The Open Guide to Amazon Web Services as a terminal you can read on a plane: 65 sections, full-text search, zero network calls.</p>
+    <div class="cta">
+      <a class="btn primary" href="manual.html"><svg class="px"><use href="#i-term"/></svg>Open the manual</a>
+      <a class="btn" href="#start"><svg class="px"><use href="#i-disk"/></svg>Take it offline</a>
     </div>
-    <div class="console-log" id="console-log" tabindex="0"></div>
+
+    <div class="dg hero-dg" role="img" aria-label="Diagram: the manual runs entirely inside your browser. A search index, a service worker and local storage sit between it and the network, and nothing crosses to the network.">
+      <div class="dg-cap">your browser</div>
+      <div class="dg-box outer">
+        <div class="dg-line"><span class="dim">aws@og:~$</span> man s3</div>
+        <div class="dg-line dim"><span>× cdn</span><span>× web fonts</span><span>× analytics</span></div>
+        <div class="dg-cap inner-cap">aws.manual</div>
+        <div class="hero-dg-row">
+          <div class="dg-box filled inner">
+            <div class="dg-line"><span class="dim">~/services/</span>s3</div>
+            <table class="dg-table">
+              <tr><td>basics</td><td class="hi">read</td></tr>
+              <tr><td>tips</td><td>4</td></tr>
+              <tr><td>gotchas</td><td>23</td></tr>
+            </table>
+          </div>
+          <div class="hero-dg-net" aria-hidden="true">
+            <span class="tag">index</span>
+            <span class="tag blue">cache</span>
+            <span class="tag blue">storage</span>
+            <div class="hero-dg-out"><span class="wire"></span><span class="cut">×</span><span class="dim">network</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <footer class="promptbar">
-    <label class="ps1" for="cmd" id="ps1">aws@og:~$</label>
-    <input id="cmd" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
-           aria-label="Command line" placeholder="type help — or / to filter, ctrl+k to search">
-    <span class="hint" id="hint">help</span>
-  </footer>
-</div>
+  <!-- ============ get started ============ -->
+  <section class="wrap sec" id="start">
+    <h2><svg class="px"><use href="#i-bolt"/></svg>Get started</h2>
 
-<div class="overlay" id="palette" hidden>
-  <div class="palette-box" role="dialog" aria-modal="true" aria-label="Search the guide">
-    <div class="palette-input-row">
-      <span class="palette-prompt">grep&nbsp;-r</span>
-      <input id="palette-input" type="text" autocomplete="off" spellcheck="false" placeholder="search 46,000 words…" aria-label="Search query">
+    <div class="tabs">
+      <input type="radio" name="tab" id="tab-disk" checked>
+      <label for="tab-disk"><svg class="px sm"><use href="#i-disk"/></svg>From disk</label>
+      <input type="radio" name="tab" id="tab-http">
+      <label for="tab-http"><svg class="px sm"><use href="#i-link"/></svg>Over HTTP</label>
+      <div class="tab-rule"></div>
+      <pre class="code" data-tab="disk"><code><span class="c"># Clone it once, then open it straight off the filesystem</span>
+git clone https://github.com/ayazmirza54/aws.manual
+xdg-open aws.manual/manual.html   <span class="c"># macOS: open aws.manual/manual.html</span></code></pre>
+      <pre class="code" data-tab="http"><code><span class="c"># Any static file server works; this one ships with Python</span>
+cd aws.manual &amp;&amp; python3 -m http.server 8000
+<span class="c"># then visit http://localhost:8000</span></code></pre>
     </div>
-    <div class="palette-results" id="palette-results"></div>
-    <div class="palette-foot">
-      <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
-      <span><kbd>enter</kbd> open</span>
-      <span><kbd>esc</kbd> close</span>
+    <p class="note">There is no build step and nothing to install. Served over HTTP it also registers a service worker, so it keeps working with the network unplugged and installs as an app.</p>
+
+    <div class="grid three">
+      <article class="card">
+        <h3><svg class="px"><use href="#i-term"/></svg>1. Open the manual</h3>
+        <p>It boots into a prompt. There is no account, no sign-in and no cookie banner.</p>
+        <div class="dg mini">
+          <div class="dg-cap">manual.html</div>
+          <div class="dg-box">
+            <div class="dg-line dim">load 65 sections <span class="hi">ok</span></div>
+            <div class="dg-line dim">network <span class="txt">down (by design)</span></div>
+            <div class="dg-line dim">ready. type `help`</div>
+            <div class="dg-line">&nbsp;</div>
+            <div class="dg-line"><span class="dim">aws@og:~$</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <h3><svg class="px"><use href="#i-book"/></svg>2. Name a service</h3>
+        <p>Type <code>man s3</code>, <code>cd ec2</code> or just <code>iam</code>. Aliases and prefixes resolve.</p>
+        <div class="dg mini">
+          <div class="dg-cap">manual.html</div>
+          <div class="dg-box">
+            <div class="dg-line"><span class="dim">aws@og:~$</span> man s3</div>
+            <div class="dg-line hi">→ S3</div>
+            <div class="dg-line">&nbsp;&nbsp;3,695 words</div>
+            <div class="dg-line">&nbsp;&nbsp;basics · tips · gotchas</div>
+            <div class="dg-line">&nbsp;&nbsp;durability and price</div>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <h3><svg class="px"><use href="#i-search"/></svg>3. Search all of it</h3>
+        <p><code>grep</code> ranks every one of the guide’s 46,494 words and shows the matching lines.</p>
+        <div class="dg mini">
+          <div class="dg-cap">manual.html</div>
+          <div class="dg-box filled">
+            <div class="dg-line"><span class="dim">aws@og:~$</span> grep spot instance</div>
+            <div class="dg-line dim">7 matching sections</div>
+            <div class="dg-line"><span class="hi">billing</span><span class="dim">101×</span></div>
+            <div class="dg-line"><span class="hi">ec2</span><span class="dim">78×</span></div>
+            <div class="dg-line"><span class="hi">s3</span><span class="dim">14×</span></div>
+          </div>
+        </div>
+      </article>
     </div>
-  </div>
-</div>
+    <p class="note">Every section and subsection has its own address, such as <code>manual.html#/s3</code> or <code>manual.html#/ec2#ec2-tips</code>, so you can bookmark or share exactly what you were reading.</p>
+  </section>
 
-<div class="overlay" id="help" hidden>
-  <div class="help-box" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
-    <h2>keyboard</h2>
-    <div class="help-grid" id="help-grid"></div>
-    <p class="help-foot">type <code>help</code> at the prompt for the command list · <kbd>esc</kbd> closes</p>
-  </div>
-</div>
+  <!-- ============ what's inside ============ -->
+  <section class="wrap sec" id="inside">
+    <h2><svg class="px"><use href="#i-grid"/></svg>What’s inside</h2>
+    <div class="grid three">
+      <article class="card">
+        <h3><svg class="px"><use href="#i-stack"/></svg>50 services</h3>
+        <p>From <a href="manual.html#/s3">S3</a>, <a href="manual.html#/ec2">EC2</a> and <a href="manual.html#/security-and-iam">IAM</a> to <a href="manual.html#/lambda">Lambda</a> and <a href="manual.html#/dynamodb">DynamoDB</a>, each with its basics, tips, and gotchas and limitations.</p>
+        <div class="dg mini tags" aria-hidden="true">
+          <span class="tag">s3</span><span class="tag">ec2</span><span class="tag dim">iam</span><span class="tag">lambda</span>
+          <span class="tag dim">rds</span><span class="tag">vpc</span><span class="tag">dynamodb</span><span class="tag dim">ecs</span>
+          <span class="tag">route 53</span><span class="tag dim">kms</span><span class="tag ghost">+40</span>
+        </div>
+      </article>
+      <article class="card">
+        <h3><svg class="px"><use href="#i-shield"/></svg>Marked gotchas</h3>
+        <p>The guide flags what the official docs leave out, and every section header counts its marks (<a href="manual.html#/legend">legend</a>).</p>
+        <div class="dg mini bars" role="img" aria-label="Marks across the guide: 162 gotchas, 56 serious gotchas, 41 tips, 29 lock-in notes.">
+          <div><span>🔸 gotcha</span><i style="--w:100%"></i><b>162</b></div>
+          <div><span>❗ serious</span><i style="--w:34.6%"></i><b>56</b></div>
+          <div><span>🔹 tip</span><i style="--w:25.3%"></i><b>41</b></div>
+          <div><span>⛓ lock-in</span><i style="--w:17.9%"></i><b>29</b></div>
+        </div>
+      </article>
+      <article class="card">
+        <h3><svg class="px"><use href="#i-book"/></svg>Tables and figures</h3>
+        <p>The <a href="manual.html#/general-information#service-matrix">service matrix</a>, <a href="manual.html#/billing-and-cost-management#aws-data-transfer-costs">data transfer costs</a> and <a href="manual.html#/s3#storage-durability-availability-and-price">storage durability</a> tables all come along.</p>
+        <div class="dg mini" aria-hidden="true">
+          <div class="dg-cap">service matrix</div>
+          <table class="dg-grid">
+            <tr><th>service</th><th>aws</th><th>alt</th></tr>
+            <tr><td>compute</td><td class="hi">ec2</td><td>gce</td></tr>
+            <tr><td>objects</td><td class="hi">s3</td><td>gcs</td></tr>
+            <tr><td>functions</td><td class="hi">lambda</td><td>gcf</td></tr>
+          </table>
+        </div>
+      </article>
+    </div>
+  </section>
 
-<script src="data/content.js"></script>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/shell.js"></script>
-<script src="assets/js/boot.js"></script>
+  <!-- ============ why ============ -->
+  <section class="wrap sec" id="why">
+    <h2><svg class="px"><use href="#i-shield"/></svg>Why use aws.manual?</h2>
+    <div class="why">
+      <ul class="dash">
+        <li>The official docs say what each AWS service does, and rarely which parts will bite you.</li>
+        <li><a href="https://github.com/open-guides/og-aws">The Open Guide</a> is field notes from engineers who run AWS: tips, gotchas, lock-in and cost.</li>
+        <li>You know you <em>should</em> read it before you build, but it is one 380 KB README.</li>
+        <li><code>aws.manual</code> splits it into 65 linkable pages with search and a command line.</li>
+      </ul>
+      <div class="why-dg" aria-hidden="true">
+        <div class="dg">
+          <div class="dg-cap">without aws.manual</div>
+          <div class="dg-box tall">
+            <div class="dg-line dim">your browser</div>
+            <div class="stack">
+              <span class="warn">31 tabs</span>
+              <span class="tag">docs page</span>
+              <span class="tag">2017 blog post</span>
+              <span class="tag">forum thread</span>
+              <span class="tag">re:Invent talk</span>
+            </div>
+            <div class="dg-line"><span class="warn">which one</span> is right?</div>
+          </div>
+        </div>
+        <div class="dg">
+          <div class="dg-cap hi">with aws.manual</div>
+          <div class="dg-box tall">
+            <div class="dg-line dim">your browser</div>
+            <div class="dg-box filled stack">
+              <span>~/s3</span>
+              <span class="tag">basics</span>
+              <span class="tag">tips</span>
+              <span class="tag">gotchas</span>
+              <span class="tag">cost</span>
+            </div>
+            <div class="dg-line">one page, offline</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ features ============ -->
+  <section class="wrap sec" id="features">
+    <div class="grid two">
+      <article class="card big">
+        <h3><svg class="px"><use href="#i-term"/></svg>A real command line</h3>
+        <ul class="dash">
+          <li><code>ls</code> and <code>tree</code> list the guide, <code>man</code> opens a section, and <code>cat</code> or <code>head</code> print it as text.</li>
+          <li><code>grep</code> searches the full text and <code>tags gotcha</code> ranks sections by a legend mark.</li>
+          <li><kbd>TAB</kbd> completes commands and section names, and <kbd>↑</kbd> <kbd>↓</kbd> walk your history.</li>
+          <li><code>star</code>, <code>stars</code> and <code>recent</code> keep your place between visits.</li>
+        </ul>
+        <div class="dg" aria-hidden="true">
+          <div class="dg-cap">aws.manual</div>
+          <div class="dg-box filled">
+            <div class="dg-line"><span class="hi">❯</span> tags gotcha</div>
+            <div class="dg-line dim">&nbsp;&nbsp;18&nbsp;&nbsp;<span class="txt">s3</span></div>
+            <div class="dg-line dim">&nbsp;&nbsp;11&nbsp;&nbsp;<span class="txt">cloudformation</span></div>
+            <div class="dg-line">&nbsp;</div>
+            <div class="dg-line"><span class="hi">❯</span> star s3</div>
+            <div class="dg-line dim">&nbsp;&nbsp;★ <span class="hi">starred</span></div>
+            <div class="dg-line">&nbsp;</div>
+            <div class="dg-line"><span class="hi">❯</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card big">
+        <h3><svg class="px"><use href="#i-disk"/></svg>Offline by design</h3>
+        <ul class="dash">
+          <li>The whole guide is one static page of about 660 KB, with no CDN, no analytics and no <code>fetch()</code>.</li>
+          <li>The fonts are in the repository, so nothing is requested from a font service.</li>
+          <li>It opens from <code>file://</code>, which means a USB stick or a laptop in airplane mode is enough.</li>
+          <li>Served over HTTP, a cache-first service worker keeps it available with the network unplugged.</li>
+        </ul>
+        <div class="dg offline" aria-hidden="true">
+          <div>
+            <div class="dg-cap">on disk</div>
+            <div class="dg-box filled">
+              <div class="dg-line">manual.html</div>
+              <div class="dg-line">content.js <span class="dim">660k</span></div>
+              <div class="dg-line">fonts/ <span class="dim">108k</span></div>
+            </div>
+          </div>
+          <div class="flow"><span class="wire hi"></span><span class="dim">file://</span></div>
+          <div>
+            <div class="dg-cap">tab</div>
+            <div class="dg-box">
+              <div class="dg-line"><span class="tag">ready</span></div>
+              <div class="dg-line dim">requests <span class="hi">0</span></div>
+              <div class="dg-line dim">network <span class="warn">off</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card big">
+        <h3><svg class="px"><use href="#i-keys"/></svg>Keyboard first</h3>
+        <ul class="dash">
+          <li><kbd>CTRL K</kbd> opens search from anywhere, and <kbd>/</kbd> filters the section list.</li>
+          <li><kbd>[</kbd> and <kbd>]</kbd> step to the previous and next section.</li>
+          <li><kbd>?</kbd> lists every shortcut, and <kbd>ESC</kbd> closes whatever is open.</li>
+          <li>Typing any other key puts you straight at the prompt.</li>
+        </ul>
+        <div class="dg keys" aria-hidden="true">
+          <span class="kg"><span class="key hi">ctrl</span><span class="key hi">k</span><span class="dim">search</span></span>
+          <span class="kg"><span class="key">/</span><span class="dim">filter</span></span>
+          <span class="kg"><span class="key">[</span><span class="key">]</span><span class="dim">prev · next</span></span>
+          <span class="kg"><span class="key">?</span><span class="dim">help</span></span>
+        </div>
+      </article>
+
+      <article class="card big">
+        <h3><svg class="px"><use href="#i-grid"/></svg>Yours to adjust</h3>
+        <ul class="dash">
+          <li><code>theme</code> switches between orange, lime, ice, synth and paper, and this page follows your choice.</li>
+          <li><code>font +</code> and <code>font -</code> change the reading size, and <code>crt on</code> adds scanlines.</li>
+          <li>Stars, recents and settings stay in your browser’s local storage and go nowhere else.</li>
+          <li>It prints cleanly, with the chrome removed.</li>
+        </ul>
+        <div class="dg swatches" role="group" aria-label="Preview a theme">
+          <button type="button" data-set-theme="orange" style="--c:#ff9900">orange</button>
+          <button type="button" data-set-theme="lime" style="--c:#7fff00">lime</button>
+          <button type="button" data-set-theme="ice" style="--c:#63c8ff">ice</button>
+          <button type="button" data-set-theme="synth" style="--c:#ff5fd2">synth</button>
+          <button type="button" data-set-theme="paper" style="--c:#f6f3ea">paper</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ faq ============ -->
+  <section class="wrap sec faq" id="faq">
+    <h2><svg class="px"><use href="#i-faq"/></svg>FAQ</h2>
+
+    <h4>Is this official AWS documentation?</h4>
+    <p>No. <code>aws.manual</code> is not affiliated with, endorsed by or sponsored by Amazon Web Services. It is a community guide, and each section links to the official docs for the service it covers.</p>
+
+    <h4>Where does the content come from?</h4>
+    <p>From <a href="https://github.com/open-guides/og-aws">open-guides/og-aws</a>, vendored at commit <code>cde0294</code> and unmodified apart from formatting. The upstream guide was last updated in August 2022, so check anything time-sensitive, such as prices and limits, against the current AWS docs.</p>
+
+    <h4>Does it really work offline?</h4>
+    <p>Yes. After the files are on disk or the page has loaded once over HTTP, it makes no network requests. Only the links that leave the guide need a connection.</p>
+
+    <h4>Is it free?</h4>
+    <p>Yes. The site’s code is under the <a href="https://github.com/ayazmirza54/aws.manual/blob/main/LICENSE">MIT license</a>, and the guide’s text is © the og-aws contributors under <a href="manual.html#/license">CC BY 4.0</a>.</p>
+  </section>
+
+  <!-- ============ final cta ============ -->
+  <section class="wrap sec" id="go">
+    <h2><svg class="px"><use href="#i-term"/></svg>Read it before you build</h2>
+    <p class="note">Open <code>aws.manual</code>, then type <code>help</code>.</p>
+    <div class="cta">
+      <a class="btn primary" href="manual.html"><svg class="px"><use href="#i-term"/></svg>Open the manual</a>
+      <a class="btn" href="https://github.com/ayazmirza54/aws.manual"><svg class="px"><use href="#i-git"/></svg>Get the source</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Guide text © the <a href="manual.html#/credits">og-aws contributors</a>, CC BY 4.0. Site code MIT.</span>
+    <span>Not affiliated with Amazon Web Services.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Theme swatches: preview here and carry the choice into the manual.
+  var buttons = document.querySelectorAll("[data-set-theme]");
+  function mark() {
+    var now = document.documentElement.getAttribute("data-theme");
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute("aria-pressed", String(buttons[i].getAttribute("data-set-theme") === now));
+    }
+  }
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () {
+      var name = this.getAttribute("data-set-theme");
+      document.documentElement.setAttribute("data-theme", name);
+      try { localStorage.setItem("aws.manual:theme.v2", JSON.stringify(name)); } catch (e) { /* preview only */ }
+      mark();
+    });
+  }
+  mark();
+
+  // ctrl/cmd+k jumps into the manual with search open.
+  document.addEventListener("keydown", function (event) {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      location.href = document.getElementById("nav-search").href;
+    }
+  });
+
+  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () { /* fine without it */ });
+    });
+  }
+})();
+</script>
 </body>
 </html>

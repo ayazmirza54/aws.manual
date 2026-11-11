@@ -24,7 +24,7 @@
   var GROUP_LABEL = Object.create(null);
   for (i = 0; i < GROUPS.length; i++) GROUP_LABEL[GROUPS[i].id] = GROUPS[i].label;
 
-  var THEMES = ["phosphor", "amber", "ice", "synth", "paper"];
+  var THEMES = ["orange", "lime", "ice", "synth", "paper"];
   var KEY = "aws.manual:";
 
   /* ---------- tiny helpers ---------- */
@@ -165,9 +165,10 @@
     terms: [],
     stars: store("stars", []),
     recents: store("recents", []),
-    theme: store("theme", "phosphor"),
-    crt: store("crt", "on"),
-    fontSize: store("font", 14)
+    // ".v2" keys: the theme set and defaults changed with the redesign.
+    theme: store("theme.v2", "orange"),
+    crt: store("crt.v2", "off"),
+    fontSize: store("font.v2", 16)
   };
 
   function isStarred(id) { return state.stars.indexOf(id) !== -1; }
@@ -193,7 +194,7 @@
     state.theme = name;
     document.documentElement.setAttribute("data-theme", name);
     $("#theme-name").textContent = name;
-    save("theme", name);
+    save("theme.v2", name);
     return true;
   }
 
@@ -205,14 +206,14 @@
   function setCrt(on) {
     state.crt = on ? "on" : "off";
     document.documentElement.setAttribute("data-crt", state.crt);
-    save("crt", state.crt);
+    save("crt.v2", state.crt);
     return state.crt;
   }
 
   function setFontSize(px) {
-    state.fontSize = Math.max(10, Math.min(22, px));
+    state.fontSize = Math.max(12, Math.min(24, px));
     document.body.style.setProperty("--fs", state.fontSize + "px");
-    save("font", state.fontSize);
+    save("font.v2", state.fontSize);
     return state.fontSize;
   }
 
@@ -278,24 +279,19 @@
 
   var docEl, footEl, viewportEl, crumbsEl;
 
-  var BANNER = [
-    "╔═╗╦ ╦╔═╗ ╔╦╗╔═╗╔╗╔╦ ╦╔═╗╦  ",
-    "╠═╣║║║╚═╗ ║║║╠═╣║║║║ ║╠═╣║  ",
-    "╩ ╩╚╩╝╚═╝ ╩ ╩╩ ╩╝╚╝╚═╝╩ ╩╩═╝"
-  ].join("\n");
-
   function renderHome() {
-    document.title = "aws.manual — offline terminal reference for AWS";
+    document.title = "aws.manual — offline reference for AWS";
     crumbsEl.innerHTML = '<span class="sep">~</span> index';
     footEl.textContent = "";
 
     var serviceIds = (GROUPS.filter(function (g) { return g.id === "services"; })[0] || {}).sections || [];
     var html = [];
 
-    html.push('<pre class="banner" aria-label="aws.manual">' + escapeHtml(BANNER) + "</pre>");
+    html.push('<span class="pill home-pill">og-aws @ ' + escapeHtml(META.revision) + " · offline</span>");
+    html.push('<h1 class="home-title"><b>❯</b> aws.manual</h1>');
     html.push(
       '<p class="home-lede">' +
-      "<b>The Open Guide to Amazon Web Services</b>, rebuilt as a terminal you can read on a plane. " +
+      "<b>The Open Guide to Amazon Web Services</b> as a terminal you can read on a plane. " +
       META.sectionCount + " sections · " + META.wordCount.toLocaleString() + " words · " +
       "zero network calls after load." +
       "</p>"
@@ -319,7 +315,7 @@
       "<li><code>man s3</code> — open a section</li>" +
       "<li><code>grep spot instance</code> — full-text search</li>" +
       "<li><code>tags gotcha</code> — sections by legend mark</li>" +
-      "<li><code>theme amber</code> · <code>crt off</code> — looks</li>" +
+      "<li><code>theme lime</code> · <code>font +</code> — looks</li>" +
       "<li><code>help</code> — the rest</li>" +
       "</ul></div>"
     );
@@ -814,7 +810,7 @@
     consoleEl = $("#console");
     consoleLog = $("#console-log");
 
-    setTheme(state.theme);
+    if (!setTheme(state.theme)) setTheme(THEMES[0]);
     setCrt(state.crt !== "off");
     setFontSize(state.fontSize);
     renderHelp();
@@ -859,6 +855,9 @@
     });
 
     renderRoute();
+
+    // manual.html?search — the landing page's search box lands here.
+    if (/[?&]search\b/.test(location.search)) openPalette("");
 
     // Warm the search index once the first paint is done.
     setTimeout(buildIndex, 400);

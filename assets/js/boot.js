@@ -19,7 +19,7 @@
       "post ......................................... ok",
       "mount /guide (og-aws @ " + meta.revision + ") ............ ok",
       "load " + meta.sectionCount + " sections / " + meta.wordCount.toLocaleString() + " words ............ ok",
-      "phosphor emitter ............................. warm",
+      "fonts (vendored) ............................. ok",
       "network interface ............................ down (by design)",
       "region ....................................... local-1a",
       "",

@@ -199,7 +199,7 @@
   define(["next"], "next", "next section", function () { A.step(1); return ok("→"); });
   define(["prev", "back"], "prev", "previous section", function () { A.step(-1); return ok("←"); });
 
-  define(["theme"], "theme [name]", "phosphor · amber · ice · synth · paper", function (args) {
+  define(["theme"], "theme [name]", "orange · lime · ice · synth · paper", function (args) {
     if (!args[0]) {
       return "themes: " + A.themes.map(function (t) {
         return t === A.state.theme ? "[" + t + "]" : t;
@@ -210,7 +210,7 @@
     return "theme: " + args[0];
   });
 
-  define(["crt"], "crt [on|off]", "scanlines and glow", function (args) {
+  define(["crt"], "crt [on|off]", "scanlines", function (args) {
     var on = args[0] ? args[0] !== "off" : A.state.crt === "off";
     return "crt: " + A.setCrt(on);
   });
@@ -221,7 +221,7 @@
     if (arg === "+" || arg === "up") size += 1;
     else if (arg === "-" || arg === "down") size -= 1;
     else if (/^\d+$/.test(arg)) size = parseInt(arg, 10);
-    else if (arg === "reset") size = 14;
+    else if (arg === "reset") size = 16;
     return "font: " + A.setFontSize(size) + "px";
   });
 
