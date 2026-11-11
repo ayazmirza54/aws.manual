@@ -222,6 +222,9 @@ ul.dash li::before { content: "–"; position: absolute; left: 0; color: var(--a
   border-top: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
 }
 .foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.foot .made { flex-basis: 100%; margin-top: 12px; font-family: var(--pixel); font-size: 11px; }
+.foot .made b { color: var(--text); font-weight: 400; }
+.foot .made i { color: var(--accent); font-style: normal; }
 .foot a { color: inherit; }
 .foot a:hover { color: var(--text); }
 

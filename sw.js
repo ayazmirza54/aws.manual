@@ -1,7 +1,7 @@
 /* aws.manual — cache-first service worker, so an http-served copy also works
    with the network unplugged. Bump CACHE when the payload changes. */
 
-var CACHE = "aws-manual-v2";
+var CACHE = "aws-manual-v3";
 var ASSETS = [
   "./",
   "index.html",
